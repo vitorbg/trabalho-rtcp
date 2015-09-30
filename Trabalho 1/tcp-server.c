@@ -19,10 +19,12 @@
 /*
  * Include Files.
  */
+#include <string.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "agenda.c"
 
 
 /*
@@ -32,8 +34,12 @@ main(argc, argv)
 int argc;
 char **argv;
 {
+
+    /* Estrutura de Dados da Agenda */
+    Cadastro agenda[n];
+
     unsigned short port;       /* port server binds to                  */
-    char buf[12];              /* buffer for sending and receiving data */
+    char buf[25];              /* buffer for sending and receiving data */
     struct sockaddr_in client; /* client address information            */
     struct sockaddr_in server; /* server address information            */
     int s;                     /* socket for accepting connections      */
@@ -104,6 +110,13 @@ char **argv;
         perror("Recv()");
     //    exit(6);
     }
+
+    printf("Olha o buffer: %s",buf);
+    printf("\n");
+    
+    
+
+    strcpy(buf, "OK");
 
     /*
      * Send the message back to the client.

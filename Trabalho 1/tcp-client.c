@@ -35,10 +35,14 @@ int argc;
 char **argv;
 {
     unsigned short port;       /* port client will connect to              */
-    char buf[12];              /* data buffer for sending and receiving    */
+    char buf[25] = "";              /* data buffer for sending and receiving    */
     struct hostent *hostnm;    /* server host name information             */
     struct sockaddr_in server; /* server address                           */
     int s;                     /* client socket                            */
+
+    char nome[10];
+    char telefone[10];
+    int op;
 
     /*
      * Check Arguments Passed. Should be hostname and port.
@@ -67,7 +71,7 @@ char **argv;
     /*
      * Put a message into the buffer.
      */
-    strcpy(buf, "the message");
+    //strcpy(buf, "the message");
 
     /*
      * Put the server information into the server structure.
@@ -94,6 +98,136 @@ char **argv;
         perror("Connect()");
      //   exit(4);
     }
+
+    do
+    {
+        fflush(stdin);
+        printf ("**Cliente de cadastro da Agenda Telefonica Distribuida**\n");
+        printf ("Selecione uma opcao.\n");
+        printf ("1- Inserir/Atualiza registro\n");
+        printf ("2- Apagar registro\n");
+        printf ("3- Acessar um registro\n");
+        printf ("4- Sair\n");
+        printf ("\nOpcao:");
+        scanf("%d", &op);
+        //Limpa o buffer para montar a mensagem do protocolo.
+        strcpy(buf, "");
+        switch(op)
+        {
+            case 1:
+                printf ("Inserir/Atualizar Registro\n");
+                printf("Digite o nome: ");
+                scanf("%s", nome);
+                printf("Digite o telefone: ");
+                scanf("%s", telefone);
+                printf("\nEnviando para o servidor. ");
+                printf("\nNome: %s  Telefone: %s",nome,telefone);
+		/*
+		Prepara a mensagem no protocolo a ser enviado para o servidor.		
+		*/
+		strcat(buf, "1|");
+		strcat(buf, nome);
+		strcat(buf, "|");
+		strcat(buf, telefone);
+		printf("\nInfo Protocolo: %s",buf);
+   		if (send(s, buf, sizeof(buf), 0) < 0)
+    		{
+        		perror("Send()");
+		       //    exit(5);
+		}
+
+		/*
+		* The server sends back the same message. Receive it into the buffer.
+		*/
+		if (recv(s, buf, sizeof(buf), 0) < 0)
+		{
+		        perror("Recv()");
+			//    exit(6);
+	    	}
+		
+    		printf("\nRESPOSTA DO SERVIDOR: %s",buf);
+
+                getchar();
+                getchar();
+
+                break;
+            case 2:
+                printf ("Remover Registro\n");
+                printf("Digite o nome: ");
+                scanf("%s", nome);
+		/*
+		Prepara a mensagem no protocolo a ser enviado para o servidor.		
+		*/
+		strcat(buf, "2|");
+		strcat(buf, nome);
+		printf("\nInfo Protocolo: %s",buf);
+   		if (send(s, buf, sizeof(buf), 0) < 0)
+    		{
+        		perror("Send()");
+		       //    exit(5);
+		}
+
+		/*
+		* The server sends back the same message. Receive it into the buffer.
+		*/
+		if (recv(s, buf, sizeof(buf), 0) < 0)
+		{
+		        perror("Recv()");
+			//    exit(6);
+	    	}
+                getchar();
+                getchar();
+
+                break;
+            case 3:
+		printf ("Acessar Registro\n");
+                printf("Digite o nome: ");
+                scanf("%s", nome);
+		/*
+		Prepara a mensagem no protocolo a ser enviado para o servidor.		
+		*/
+		strcat(buf, "3|");
+		strcat(buf, nome);
+		printf("\nInfo Protocolo: %s",buf);
+
+   		if (send(s, buf, sizeof(buf), 0) < 0)
+    		{
+        		perror("Send()");
+		       //    exit(5);
+		}
+
+		/*
+		* The server sends back the same message. Receive it into the buffer.
+		*/
+		if (recv(s, buf, sizeof(buf), 0) < 0)
+		{
+		        perror("Recv()");
+			//    exit(6);
+	    	}
+                getchar();
+                getchar();
+
+                break;
+            case 4:
+                op =0;
+                break;
+            default:
+                printf("Opcao invalida !\n");
+                printf("Digite uma opcao correta !\n");
+                op=5;
+                getchar();
+                getchar();
+                system("cls");
+                break;
+        }
+
+    }while(op);
+
+
+
+
+
+
 
     if (send(s, buf, sizeof(buf), 0) < 0)
     {
