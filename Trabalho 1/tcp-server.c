@@ -122,7 +122,6 @@ char **argv;
  
         printf("Mensagem Recebida: %s",buf);
         printf("\n");
-        printf("buf 0 %c",buf[0]);
         
         //Identifica a acao pelo protocolo
 	/*
@@ -156,7 +155,7 @@ char **argv;
 		}
 		else
 		{
-			strcpy(buf, "NAO-OK");
+			strcpy(buf, "AGENDA-CHEIA");
 		}
 		
 		
@@ -168,10 +167,7 @@ char **argv;
        			perror("Send()");
 		    //    exit(7);
  		}
-		printf("\n Tupla de Registro:");
-		printf("\n nome: %s ",nome);
-		printf("\n telefone: %s ",telefone);
-		printf("\n");
+
 		//zera buffer
 		strcpy(buf, "");
        }
@@ -199,7 +195,7 @@ char **argv;
 			}
 			else
 			{
-				strcpy(buf, "REGISTRO NAO ENCONTRADO");
+				strcpy(buf, "REGISTRO-NAO-ENCONTRADO");
 			}
 		    	if (send(ns, buf, sizeof(buf), 0) < 0)
 			{
@@ -231,7 +227,7 @@ char **argv;
 				}
 				else
 				{
-					strcpy(buf, "REGISTRO NAO ENCONTRADO");
+					strcpy(buf, "REGISTRO-NAO-ENCONTRADO");
 				}
 			    	if (send(ns, buf, sizeof(buf), 0) < 0)
 				{
@@ -246,7 +242,7 @@ char **argv;
 				portanto nenhuma ação poderá ser realizada
 				*/
 				strcpy(buf, "");					
-				strcpy(buf, "ACAO NAO DETECTADA");
+				strcpy(buf, "ACAO-NAO-DETECTADA");
 				if (send(ns, buf, sizeof(buf), 0) < 0)
 				{
        					perror("Send()");
@@ -254,7 +250,7 @@ char **argv;
  				}
 			}
 		}
-       }
+	}
 	
 
        mostraTodos(agenda);
