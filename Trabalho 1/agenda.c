@@ -1,87 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define n 10
+#define LIMITE_AGENDA 10
 
 struct cadastro
 {
-    char nome[80];
-    int DDD;
-    char telefone[8];
-    char tipotel[15];
+    char nome[10];
+    char telefone[10];
 };
+
 typedef struct cadastro Cadastro;
 
-void cadastrar(Cadastro *agenda)
-{
-    int i;
+int fimAgenda = 0;
 
-    for (i=0;i<n;i++)
+int cadastrar(Cadastro *agenda, char *nome, char *telefone)
+{
+    //Agenda está cheia
+    if (fimAgenda == LIMITE_AGENDA)
     {
-        printf ("**AGENDA - CADASTRO DE PESSOAS**\n");
-        printf ("Para sair digite 'acabou' !\n");
-        printf ("Digite o nome:");
-        fflush(stdin);
-        scanf ("%[^\n]s", agenda[i].nome);
-        if ((strcmp(agenda[i].nome, "acabou"))==0)
-        {
-            fflush(stdin);
-            break;
-        }
-        fflush(stdin);
-        printf ("Digite o DDD do telefone:");
-        scanf ("%d", &agenda[i].DDD);
-        fflush(stdin);
-        printf ("Digite o numero do telefone:");
-        scanf ("%[^\n]s", agenda[i].telefone);
-        fflush(stdin);
-        printf ("Digite o tipo do telefone(Fixo/Celular):");
-        scanf ("%[^\n]s", agenda[i].tipotel);
-        fflush(stdin);
-        system("cls");
+        return 0;
     }
-    if (i==n)
-        printf ("\n\nLimite de cadastro excedido !!\n\n");
+
+    //Verifica se registro existe
+    int i;
+    for (i=0;i<fimAgenda;i++)
+    {
+        //Se existe, atualiza telefone
+        if ((strcmp(agenda[i].nome, nome))==0)
+        {
+		strcpy(agenda[fimAgenda].telefone, telefone);
+		return 1;	 	
+        }
+    }
+    
+    //Cadastra o registro novo
+    strcpy(agenda[fimAgenda].nome, nome);
+    strcpy(agenda[fimAgenda].telefone, telefone);
+    fimAgenda++;
+    
+    return 1;
+}
+
+int removeRegistro(Cadastro *agenda, char *nome)
+{
+    //Verifica se registro existe
+    int i;
+    for (i=0;i<fimAgenda;i++)
+    {
+        //Se existe, atualiza telefone
+        if ((strcmp(agenda[i].nome, nome))==0)
+        {
+		strcpy(agenda[i].nome, "");
+		strcpy(agenda[i].telefone, "");				
+		return 1;	 	
+        }
+    }
+    //Registro não encontrado, retorna 0
+    return 0;
+}
+
+int retornaTelefone(Cadastro *agenda, char *nome, char *telefone)
+{
+    //Verifica se registro existe
+    int i;
+    for (i=0;i<fimAgenda;i++)
+    {
+        //Se existe, copia telefone para variavel auxiliar telefone
+        if ((strcmp(agenda[i].nome, nome))==0)
+        {
+		strcpy(telefone, agenda[i].telefone);	 		
+		return 1;
+        }
+    }
+    //Registro não encontrado, retorna 0
+    return 0;
+
+}
+
+void mostraTodos(Cadastro *agenda)
+{
+    //Mostra todos os registros da Agenda
+    int i;
+    printf("\nRegistros da Agenda\n");
+    for (i=0;i<fimAgenda;i++)
+    {
+    	printf("Registro %d ",i);	
+    	printf("%s - ", agenda[i].nome);	
+   	printf("%s ", agenda[i].telefone);	
+	printf("\n");
+    }
 }
 
 void busca(Cadastro *agenda)
 {
-    int con, i;
-    char aux[20];
-    system("cls");
-    do
-    {
-        printf ("**CONSULTA DE TELEFONES **\n");
-        printf ("Para sair digite 'fim'.\n");
-        printf ("\nDigite o nome da pessoa: ");
-        fflush(stdin);
-        scanf ("%[^\n]s",aux);
-        fflush(stdin);
-        if (strcmp(aux, "fim")==0)
-            exit(1);
-
-        con = 0;
-        for (i=0;i<n;i++)
-        {
-            if (strcmp(aux, agenda[i].nome)==0)
-            {
-                con=1;
-                break;
-            }
-        }
-        if (con == 1)
-        {
-            system("cls");
-            printf ("NOME: %s", agenda[i].nome);
-            printf ("\nDDD: %d", agenda[i].DDD);
-            printf ("\nTELEFONE: %s", agenda[i].telefone);
-            printf ("\nTIPO\n: %s", agenda[i].tipotel);
-        }
-        else
-        {
-            system("cls");
-            printf ("Registro nao encontrado !\n");
-        }
-        }while(aux != "fim");
+   
 }
 /*
 int main()

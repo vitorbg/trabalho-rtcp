@@ -183,6 +183,27 @@ char **argv;
 		printf ("Acessar Registro\n");
                 printf("Digite o nome: ");
                 scanf("%s", nome);
+		/*
+		Prepara a mensagem no protocolo a ser enviado para o servidor.		
+		*/
+		strcat(buf, "3|");
+		strcat(buf, nome);
+		printf("\nInfo Protocolo: %s",buf);
+
+   		if (send(s, buf, sizeof(buf), 0) < 0)
+    		{
+        		perror("Send()");
+		       //    exit(5);
+		}
+
+		/*
+		* The server sends back the same message. Receive it into the buffer.
+		*/
+		if (recv(s, buf, sizeof(buf), 0) < 0)
+		{
+		        perror("Recv()");
+			//    exit(6);
+	    	}
                 getchar();
                 getchar();
 
@@ -201,27 +222,6 @@ char **argv;
         }
 
     }while(op);
-
-
-
-
-
-
-
-    if (send(s, buf, sizeof(buf), 0) < 0)
-    {
-        perror("Send()");
-    //    exit(5);
-    }
-
-    /*
-     * The server sends back the same message. Receive it into the buffer.
-     */
-    if (recv(s, buf, sizeof(buf), 0) < 0)
-    {
-        perror("Recv()");
-    //    exit(6);
-    }
 
     /*
      * Close the socket.

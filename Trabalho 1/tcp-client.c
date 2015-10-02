@@ -175,6 +175,9 @@ char **argv;
 		        perror("Recv()");
 			//    exit(6);
 	    	}
+
+    		printf("\nRESPOSTA DO SERVIDOR: %s",buf);
+
                 getchar();
                 getchar();
 
@@ -204,6 +207,10 @@ char **argv;
 		        perror("Recv()");
 			//    exit(6);
 	    	}
+
+    		printf("\nRESPOSTA DO SERVIDOR: %s",buf);
+
+
                 getchar();
                 getchar();
 
@@ -222,27 +229,6 @@ char **argv;
         }
 
     }while(op);
-
-
-
-
-
-
-
-    if (send(s, buf, sizeof(buf), 0) < 0)
-    {
-        perror("Send()");
-    //    exit(5);
-    }
-
-    /*
-     * The server sends back the same message. Receive it into the buffer.
-     */
-    if (recv(s, buf, sizeof(buf), 0) < 0)
-    {
-        perror("Recv()");
-    //    exit(6);
-    }
 
     /*
      * Close the socket.
