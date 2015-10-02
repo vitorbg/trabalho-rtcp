@@ -108,27 +108,28 @@ char **argv;
         perror("Accept()");
      //   exit(5);
     }
-
     while(1)
     {
     	/*
     	 * Receive the message on the newly connected socket.
     	 */
-    	if (recv(ns, buf, sizeof(buf), 0) == -1)
-    	{
+    	if (recv(ns, buf, sizeof(buf), 0) == -1){
         	perror("Recv()");
 	    //    exit(6);
-	}
+		}
  
         printf("Mensagem Recebida: %s",buf);
         printf("\n");
+        printf("buf 0 %c",buf[0]);
         
         //Identifica a acao pelo protocolo
 	/*
 	Acao 1 é inserir/atualizar registro
 	Mensagem esperada: 1|nome|telefone
 	*/
-        if (buf[0] == '1')
+ memset(nome,'\0', 10); //Limpa o vetor nome
+  memset(telefone,'\0', 10); //Limpa o vetor telefo
+	if (buf[0] == '1')
 	{
 		//Quebra a mensagem capturando os dois campos do protocolo
 		i=0;
@@ -155,19 +156,22 @@ char **argv;
 		}
 		else
 		{
-			strcpy(buf, "AGENDA-CHEIA");
+			strcpy(buf, "NAO-OK");
 		}
 		
 		
 		/*
 		* Send the message back to the client.
 	     	*/
-	    	if (send(ns, buf, sizeof(buf), 0) < 0)
+    	if (send(ns, buf, sizeof(buf), 0) < 0)
 		{
        			perror("Send()");
 		    //    exit(7);
  		}
-
+		printf("\n Tupla de Registro:");
+		printf("\n nome: %s ",nome);
+		printf("\n telefone: %s ",telefone);
+		printf("\n");
 		//zera buffer
 		strcpy(buf, "");
        }
@@ -195,7 +199,7 @@ char **argv;
 			}
 			else
 			{
-				strcpy(buf, "REGISTRO-NAO-ENCONTRADO");
+				strcpy(buf, "REGISTRO NAO ENCONTRADO");
 			}
 		    	if (send(ns, buf, sizeof(buf), 0) < 0)
 			{
@@ -227,7 +231,7 @@ char **argv;
 				}
 				else
 				{
-					strcpy(buf, "REGISTRO-NAO-ENCONTRADO");
+					strcpy(buf, "REGISTRO NAO ENCONTRADO");
 				}
 			    	if (send(ns, buf, sizeof(buf), 0) < 0)
 				{
@@ -242,7 +246,7 @@ char **argv;
 				portanto nenhuma ação poderá ser realizada
 				*/
 				strcpy(buf, "");					
-				strcpy(buf, "ACAO-NAO-DETECTADA");
+				strcpy(buf, "ACAO NAO DETECTADA");
 				if (send(ns, buf, sizeof(buf), 0) < 0)
 				{
        					perror("Send()");
@@ -250,7 +254,7 @@ char **argv;
  				}
 			}
 		}
-	}
+       }
 	
 
        mostraTodos(agenda);

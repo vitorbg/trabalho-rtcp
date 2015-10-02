@@ -27,14 +27,14 @@ int cadastrar(Cadastro *agenda, char *nome, char *telefone)
         //Se existe, atualiza telefone
         if ((strcmp(agenda[i].nome, nome))==0)
         {
-		strcpy(agenda[fimAgenda].telefone, telefone);
+		  strcpy(agenda[i].telefone, telefone);
 		return 1;	 	
         }
     }
     
     //Cadastra o registro novo
-    strcpy(agenda[fimAgenda].nome, nome);
-    strcpy(agenda[fimAgenda].telefone, telefone);
+    strcpy(agenda[i].nome, nome);
+    strcpy(agenda[i].telefone, telefone);
     fimAgenda++;
     
     return 1;
@@ -43,17 +43,23 @@ int cadastrar(Cadastro *agenda, char *nome, char *telefone)
 int removeRegistro(Cadastro *agenda, char *nome)
 {
     //Verifica se registro existe
-    int i;
+    int i,j;
     for (i=0;i<fimAgenda;i++)
     {
         //Se existe, atualiza telefone
         if ((strcmp(agenda[i].nome, nome))==0)
         {
 		strcpy(agenda[i].nome, "");
-		strcpy(agenda[i].telefone, "");				
+		strcpy(agenda[i].telefone, "");
+        for(j=i;j<fimAgenda;j++){
+            strcpy(agenda[j].nome,agenda[j+1].nome);
+            strcpy(agenda[j].telefone,agenda[j+1].telefone);				
+        }
+        fimAgenda--;
 		return 1;	 	
         }
     }
+
     //Registro não encontrado, retorna 0
     return 0;
 }
@@ -89,18 +95,3 @@ void mostraTodos(Cadastro *agenda)
 	printf("\n");
     }
 }
-
-void busca(Cadastro *agenda)
-{
-   
-}
-/*
-int main()
-{
-    Cadastro agenda[n];
-
-    cadastrar(agenda);
-    busca(agenda);
-
-    return 0;
-}*/

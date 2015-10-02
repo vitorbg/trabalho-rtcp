@@ -26,7 +26,6 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/time.h>
 
 /*
  * Client Main.
@@ -41,9 +40,6 @@ char **argv;
     struct sockaddr_in server; /* server address                           */
     int s;                     /* client socket                            */
 
-    /*
-    Variáveis de auxilo de execução do cliente.
-    */	
     char nome[10];
     char telefone[10];
     int op;
@@ -76,6 +72,11 @@ char **argv;
     port = (unsigned short) atoi(argv[2]);
 
     /*
+     * Put a message into the buffer.
+     */
+    //strcpy(buf, "the message");
+
+    /*
      * Put the server information into the server structure.
      * The port must be put into network byte order.
      */
@@ -104,7 +105,7 @@ char **argv;
     do
     {
         fflush(stdin);
-        printf ("\n\n**Cliente de cadastro da Agenda Telefonica Distribuida**\n");
+        printf ("**Cliente de cadastro da Agenda Telefonica Distribuida**\n");
         printf ("Selecione uma opcao.\n");
         printf ("1- Inserir/Atualiza registro\n");
         printf ("2- Apagar registro\n");
@@ -132,11 +133,11 @@ char **argv;
 		strcat(buf, "|");
 		strcat(buf, telefone);
 		printf("\nInfo Protocolo: %s",buf);
-		
+
 		//Inicio da contagem de tempo de resposta do servidor
 		gettimeofday(&inicio, NULL);
-   		
-		if (send(s, buf, sizeof(buf), 0) < 0)
+
+   		if (send(s, buf, sizeof(buf), 0) < 0)
     		{
         		perror("Send()");
 		       //    exit(5);
@@ -150,12 +151,14 @@ char **argv;
 		        perror("Recv()");
 			//    exit(6);
 	    	}
-	
+		
+
 		//Fim da contagem de tempo de resposta do servidor
                 gettimeofday(&final, NULL);
 		tempo = (float) (1000 * (final.tv_sec - inicio.tv_sec) + (final.tv_usec - inicio.tv_usec) / 1000);
 		printf("\nTempo para resposta do servidor: %f\n", tempo); 
-		
+
+
     		printf("\nRESPOSTA DO SERVIDOR: %s",buf);
 
                 getchar();
@@ -195,6 +198,7 @@ char **argv;
                 gettimeofday(&final, NULL);
 		tempo = (float) (1000 * (final.tv_sec - inicio.tv_sec) + (final.tv_usec - inicio.tv_usec) / 1000);
 		printf("\nTempo para resposta do servidor: %f\n", tempo); 
+
     		printf("\nRESPOSTA DO SERVIDOR: %s",buf);
 
                 getchar();
@@ -234,6 +238,7 @@ char **argv;
                 gettimeofday(&final, NULL);
 		tempo = (float) (1000 * (final.tv_sec - inicio.tv_sec) + (final.tv_usec - inicio.tv_usec) / 1000);
 		printf("\nTempo para resposta do servidor: %f\n", tempo); 
+
     		printf("\nRESPOSTA DO SERVIDOR: %s",buf);
 
 
